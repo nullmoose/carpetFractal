@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>fractals and stuff</title>
+
+        <script type="text/javascript" src="http://connect.soundcloud.com/sdk.js"></script>
+        <script type="text/javascript" src="/js/fract.js"></script>
+
+    </head>
+
+    <body onload="init();">
+        <h1>fractal stuff on a canvas</h1>
+        <canvas id="canvasFract" width="0" height="0" onclick="clicked();"></canvas>
+        <br>
+
+        <input id="iterationSlider" type="range">Set iterations</input>
+        <input id="redSlider" type="range">Red value</input>
+        <input id="greenSlider" type="range">Green value</input>
+        <input id="blueSlider" type="range">Blue value</input>
+        <button id="renderButton" onclick="renderButtonPressed();">Render</button>
+        <br>
+
+        <audio id="audioplayer" controls="" autoplay="" preload autobuffer></audio>
+        <a href="http://www.soundcloud.com"><img src="sclogo.png"/></a>
+    </body>
+</html>

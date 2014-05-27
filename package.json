@@ -1,0 +1,17 @@
+{
+	"name": "SiliconFeelings",
+	"description": "",
+	"version": "0.0.1",
+	"author": "Bradley",
+	"private": true,
+	"dependencies": {
+		"config": "*",
+		"express": "3.3.5",
+		"node.extend": "*",
+		"punycode": "*",
+		"underscore": "*"
+	},
+	"devDependencies": {
+		"mocha": "~1.13.0"
+	}
+}
