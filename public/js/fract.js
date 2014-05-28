@@ -1,18 +1,60 @@
 var canvas,
     ctx,
-    iterSlider,
+    audioCtx,
+    source,
+    analyserNode,
+    urlText,
+    urlForm,
+    /*iterSlider,
     redSlider,
     greenSlider,
-    blueSlider,
+    blueSlider,*/
     audioPlayer,
+    streamUrl,
     clientId;
 
+function init(){
+    canvas = document.getElementById("canvasFract");
+    ctx = canvas.getContext("2d");
 
-/*function testSoundcloud(client_id, track_url) {
-    SC.initialize({
-        client_id: client_id
+    audioCtx = new (window.AudioContext || window.webkitAudioContext);
+    audioPlayer = document.getElementById("audioplayer");
+    analyserNode = audioCtx.createAnalyser();
+    source = audioCtx.createMediaElementSource(audioPlayer);
+    source.connect(analyserNode);
+    analyserNode.connect(audioCtx.destination);
+
+    urlForm = document.getElementById("urlForm");
+    urlText = document.getElementById("urlText");
+    urlForm.addEventListener("submit", function(e){
+        e.preventDefault();
+        playSound(urlText.value);
     });
-    SC.get('/resolve', { url: track_url }, function(sound) {
+    /*iterSlider = document.getElementById("iterationSlider");
+    redSlider = document.getElementById("redSlider");
+    greenSlider = document.getElementById("greenSlider");
+    blueSlider = document.getElementById("blueSlider");*/
+
+    canvas.width  = Math.min(window.innerWidth, window.innerHeight);
+    canvas.height = Math.min(window.innerWidth, window.innerHeight);
+
+    /*iterSlider.min = 0; iterSlider.max = 5; iterSlider.value = 5;
+    redSlider.min = 0; redSlider.max = 255; redSlider.value = 200;
+    greenSlider.min = 0; greenSlider.max = 255; greenSlider.value = 0;
+    blueSlider.min = 0; blueSlider.max = 255; blueSlider.value = 0;*/
+
+    clientId = "0fbc5c9836ca999eecbcfea77f90bc2f";
+    
+    //playSound("https://soundcloud.com/dan-deacon/oscillating-diamonds");
+    clearCanvas();
+    setColor();
+    draw(Math.round(canvas.width/3),0,0,0,5,false);
+}
+
+function playSound(soundURL){
+    SC.initialize({client_id: clientId});
+
+    SC.get('/resolve', { url: soundURL }, function(sound) {
         if (sound.errors) {
             errorMessage = "";
             for (var i = 0; i < sound.errors.length; i++) {
@@ -24,42 +66,19 @@ var canvas,
 
             if(sound.kind=="playlist"){
                 streamPlaylistIndex = 0;
-                streamUrl = function(){
-                    return sound.tracks[streamPlaylistIndex].stream_url + '?client_id=' + client_id;
+                findStream = function(){
+                    return sound.tracks[streamPlaylistIndex].stream_url + '?client_id=' + clientId;
                 }
-                console.log('success: ' + streamUrl());
+                streamUrl = findStream();
             }else{
-                streamUrl = function(){ return sound.stream_url + '?client_id=' + client_id; };
-                console.log('success: ' + streamUrl());
+                findStream = function(){ return sound.stream_url + '?client_id=' + clientId; };
+                streamUrl = findStream();
+                audioPlayer.setAttribute("src", streamUrl);
+                audioPlayer.play();
             }
         }
     });
-}*/
-
-function init(){
-    canvas = document.getElementById("canvasFract");
-    ctx = canvas.getContext("2d");
-    iterSlider = document.getElementById("iterationSlider");
-    redSlider = document.getElementById("redSlider");
-    greenSlider = document.getElementById("greenSlider");
-    blueSlider = document.getElementById("blueSlider");
-    audioPlayer = document.getElementById("audioPlayer");
-
-    canvas.width  = Math.min(window.innerWidth, window.innerHeight);
-    canvas.height = Math.min(window.innerWidth, window.innerHeight);
-
-    iterSlider.min = 0; iterSlider.max = 5; iterSlider.value = 5;
-    redSlider.min = 0; redSlider.max = 255; redSlider.value = 200;
-    greenSlider.min = 0; greenSlider.max = 255; greenSlider.value = 0;
-    blueSlider.min = 0; blueSlider.max = 255; blueSlider.value = 0;
-
-    clientId = "0fbc5c9836ca999eecbcfea77f90bc2f";
-
-//    testSoundcloud(clientId, "http://soundcloud.com/dan-deacon/gangrimes-style");
-
-    clearCanvas();
-    setColor();
-    draw(Math.round(canvas.width/3),0,0,0,iterSlider.value,false);
+    
 }
 
 function draw(l, x, y, de, dl, rand){
@@ -84,7 +103,7 @@ function draw(l, x, y, de, dl, rand){
 }
 
 function setColor() {
-    ctx.fillStyle = "rgb(" + redSlider.value + "," + greenSlider.value + "," + blueSlider.value + ")";
+    ctx.fillStyle = "rgb(200,0,0)";
 }
 
 function setrandomColor(){
@@ -100,14 +119,14 @@ function clearCanvas() {
     ctx.fillRect(0,0,canvas.width,canvas.height);
 }
 
-function renderButtonPressed() {
+/*function renderButtonPressed() {
     clearCanvas();
 
     setColor();
     draw(Math.round(canvas.width/3),0,0,0,iterSlider.value,false);
-}
+}*/
 
 function clicked(){
     clearCanvas();
-    draw(Math.round(canvas.width/3),0,0,0,iterSlider.value,true);
+    draw(Math.round(canvas.width/3),0,0,0,5,true);
 }

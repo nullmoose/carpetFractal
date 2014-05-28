@@ -13,14 +13,20 @@
         <canvas id="canvasFract" width="0" height="0" onclick="clicked();"></canvas>
         <br>
 
-        <input id="iterationSlider" type="range">Set iterations</input>
+        <!--<input id="iterationSlider" type="range">Set iterations</input>
         <input id="redSlider" type="range">Red value</input>
         <input id="greenSlider" type="range">Green value</input>
         <input id="blueSlider" type="range">Blue value</input>
         <button id="renderButton" onclick="renderButtonPressed();">Render</button>
-        <br>
+        <br>-->
 
-        <audio id="audioplayer" controls="" autoplay="" preload autobuffer></audio>
+        <form id="urlForm">
+            SoundCloud URL: <input type="text" id="urlText">
+            <button type="submit" id="playButton">Play</button>
+        </form>
+
+        <br>
+        <audio id="audioplayer" controls="" preload autobuffer></audio>
         <a href="http://www.soundcloud.com"><img src="sclogo.png"/></a>
     </body>
 </html>
