@@ -3,6 +3,7 @@ var canvas,
     audioCtx,
     source,
     analyserNode,
+    soundData,
     urlText,
     urlForm,
     /*iterSlider,
@@ -20,12 +21,19 @@ function init(){
     audioCtx = new (window.AudioContext || window.webkitAudioContext);
     audioPlayer = document.getElementById("audioplayer");
     analyserNode = audioCtx.createAnalyser();
+    analyserNode.fftSize = 256;
+    soundData = new Uint8Array(128);
     source = audioCtx.createMediaElementSource(audioPlayer);
     source.connect(analyserNode);
     analyserNode.connect(audioCtx.destination);
 
+    audioplayer.addEventListener("pause", function(e){
+        clearInterval(setInterval(function(){analyseSound();},100));
+    });
+
     urlForm = document.getElementById("urlForm");
     urlText = document.getElementById("urlText");
+
     urlForm.addEventListener("submit", function(e){
         e.preventDefault();
         playSound(urlText.value);
@@ -47,7 +55,7 @@ function init(){
     
     //playSound("https://soundcloud.com/dan-deacon/oscillating-diamonds");
     clearCanvas();
-    setColor();
+    ctx.fillStyle = "rgb(200,0,0)";
     draw(Math.round(canvas.width/3),0,0,0,5,false);
 }
 
@@ -78,13 +86,19 @@ function playSound(soundURL){
             }
         }
     });
-    
+
+    setInterval(function(){draw(Math.round(canvas.width/3),0,0,0,5,true);},50);
+    setInterval(function(){analyseSound();},50);
+}
+
+function analyseSound(){
+    analyserNode.getByteFrequencyData(soundData);
 }
 
 function draw(l, x, y, de, dl, rand){
 
     if (rand) {
-        setrandomColor();
+        setColor(de);
     }
     ctx.fillRect(x+l,y+l,l,l);
 
@@ -102,8 +116,8 @@ function draw(l, x, y, de, dl, rand){
     }
 }
 
-function setColor() {
-    ctx.fillStyle = "rgb(200,0,0)";
+function setColor(de) {
+    ctx.fillStyle = "rgb(" + soundData[(de*20)+(21-de*5)] + "," + soundData[(de*20)+(25-de*5)] + "," + soundData[(de*20)+(30-de*5)] + ")";
 }
 
 function setrandomColor(){
