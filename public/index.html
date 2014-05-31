@@ -3,15 +3,31 @@
     <head>
         <title>fractals and stuff</title>
 
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+
         <script type="text/javascript" src="http://connect.soundcloud.com/sdk.js"></script>
         <script type="text/javascript" src="/js/fract.js"></script>
 
     </head>
-
     <body onload="init();">
-        <h1>fractal stuff on a canvas</h1>
-        <canvas id="canvasFract" width="0" height="0" onclick="clicked();"></canvas>
-        <br>
+        <div id="layout-container">
+            <div id="control">
+                <h1 id="header">fractal stuff on a canvas</h1>
+                <form id="urlForm">
+                    SoundCloud URL: <input type="text" id="urlText">
+                    <button type="submit" id="playButton">Play</button>
+                </form>
+
+                <br>
+                <audio id="audioplayer" controls="" preload autobuffer></audio>
+                <br>
+                <a href="http://www.soundcloud.com"><img src="sclogo.png"/></a>
+            </div>
+
+            <div id="canvas-container">
+                <canvas id="canvasFract" width="0" height="0" onclick="clicked();"></canvas>
+            </div>
+        <div>
 
         <!--<input id="iterationSlider" type="range">Set iterations</input>
         <input id="redSlider" type="range">Red value</input>
@@ -19,14 +35,5 @@
         <input id="blueSlider" type="range">Blue value</input>
         <button id="renderButton" onclick="renderButtonPressed();">Render</button>
         <br>-->
-
-        <form id="urlForm">
-            SoundCloud URL: <input type="text" id="urlText">
-            <button type="submit" id="playButton">Play</button>
-        </form>
-
-        <br>
-        <audio id="audioplayer" controls="" preload autobuffer></audio>
-        <a href="http://www.soundcloud.com"><img src="sclogo.png"/></a>
     </body>
 </html>

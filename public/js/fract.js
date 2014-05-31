@@ -4,6 +4,7 @@ var canvas,
     source,
     analyserNode,
     soundData,
+    volumeData,
     urlText,
     urlForm,
     /*iterSlider,
@@ -23,6 +24,7 @@ function init(){
     analyserNode = audioCtx.createAnalyser();
     analyserNode.fftSize = 256;
     soundData = new Uint8Array(128);
+    volumeData = new Uint8Array(5);
     source = audioCtx.createMediaElementSource(audioPlayer);
     source.connect(analyserNode);
     analyserNode.connect(audioCtx.destination);
@@ -87,20 +89,28 @@ function playSound(soundURL){
         }
     });
 
-    setInterval(function(){draw(Math.round(canvas.width/3),0,0,0,5,true);},50);
-    setInterval(function(){analyseSound();},50);
+    setInterval(function(){analyseSound();},2);
+    setInterval(function(){clearCanvas();},2);
+    setInterval(function(){draw(Math.round(canvas.width/3),0,0,0,5,true);},2);
 }
 
 function analyseSound(){
     analyserNode.getByteFrequencyData(soundData);
+
+    var v = 0;
+
+    for(var i = 0; i < 5; i++){
+        for(var n = 0; n < 20; n++){
+            v += soundData[(i*20)+n];
+        }
+        volumeData[i] = v/20;
+        v = 0;
+    }
+
+    //console.log(volumeData[3]);
 }
 
 function draw(l, x, y, de, dl, rand){
-
-    if (rand) {
-        setColor(de);
-    }
-    ctx.fillRect(x+l,y+l,l,l);
 
     var nl = Math.round(l/3);
 
@@ -114,6 +124,27 @@ function draw(l, x, y, de, dl, rand){
         draw(nl,x+l     ,y+(l*2)   ,de+1,dl,rand);
         draw(nl,x+(l*2) ,y+(l*2)   ,de+1,dl,rand);
     }
+
+    var vl = 0;
+
+    if(volumeData[de] < 30 && volumeData[de] > 20){
+        vl = 2;
+    }
+
+    if(volumeData[de] < 40 && volumeData[de] > 30){
+        vl = 4;
+    }
+    if(volumeData[de] < 50 && volumeData[de] > 40){
+        vl = 6;
+    }
+    if(volumeData[de] > 50){
+        vl = 8;
+    }
+
+    if (rand) {
+        setColor(de);
+    }
+    ctx.fillRect((x+l)-(vl/2),(y+l)-(vl/2),l+vl,l+vl);
 }
 
 function setColor(de) {
@@ -138,9 +169,9 @@ function clearCanvas() {
 
     setColor();
     draw(Math.round(canvas.width/3),0,0,0,iterSlider.value,false);
-}*/
+}
 
 function clicked(){
     clearCanvas();
     draw(Math.round(canvas.width/3),0,0,0,5,true);
-}
+}*/
