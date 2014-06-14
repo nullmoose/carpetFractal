@@ -5,12 +5,9 @@ var canvas,
     analyserNode,
     soundData,
     volumeData,
+    animateInterval,
     urlText,
     urlForm,
-    /*iterSlider,
-    redSlider,
-    greenSlider,
-    blueSlider,*/
     audioPlayer,
     streamUrl,
     clientId;
@@ -40,22 +37,12 @@ function init(){
         e.preventDefault();
         playSound(urlText.value);
     });
-    /*iterSlider = document.getElementById("iterationSlider");
-    redSlider = document.getElementById("redSlider");
-    greenSlider = document.getElementById("greenSlider");
-    blueSlider = document.getElementById("blueSlider");*/
 
     canvas.width  = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = Math.min(window.innerWidth, window.innerHeight);
 
-    /*iterSlider.min = 0; iterSlider.max = 5; iterSlider.value = 5;
-    redSlider.min = 0; redSlider.max = 255; redSlider.value = 200;
-    greenSlider.min = 0; greenSlider.max = 255; greenSlider.value = 0;
-    blueSlider.min = 0; blueSlider.max = 255; blueSlider.value = 0;*/
-
     clientId = "0fbc5c9836ca999eecbcfea77f90bc2f";
-    
-    //playSound("https://soundcloud.com/dan-deacon/oscillating-diamonds");
+
     clearCanvas();
     ctx.fillStyle = "rgb(200,0,0)";
     draw(Math.round(canvas.width/3),0,0,0,5,false);
@@ -89,9 +76,23 @@ function playSound(soundURL){
         }
     });
 
-    setInterval(function(){analyseSound();},2);
-    setInterval(function(){clearCanvas();},2);
-    setInterval(function(){draw(Math.round(canvas.width/3),0,0,0,5,true);},2);
+    animateInterval = setInterval(function(){animate();},2);
+}
+
+function animate(){
+    analyseSound();
+    clearCanvas();
+    draw(Math.round(canvas.width/3),0,0,0,5,true);
+}
+
+function pauseButtonPressed(){
+    clearInterval(animateInterval);
+    console.log("pause button");
+}
+
+function playButtonPressed(){
+    animateInterval = setInterval(function(){animate();},2);
+    console.log("play button");
 }
 
 function analyseSound(){
@@ -107,14 +108,18 @@ function analyseSound(){
         v = 0;
     }
 
-    //console.log(volumeData[3]);
+    for(var i; i < 5; i++){
+        v += volumeData[i];
+    }
+
+    volumeData[0] = v/5;
 }
 
 function draw(l, x, y, de, dl, rand){
 
     var nl = Math.round(l/3);
 
-    if (de<dl) {
+    if (de<5) {
         draw(nl,x       ,y         ,de+1,dl,rand);
         draw(nl,x+l     ,y         ,de+1,dl,rand);
         draw(nl,x+(l*2) ,y         ,de+1,dl,rand);
@@ -127,17 +132,17 @@ function draw(l, x, y, de, dl, rand){
 
     var vl = 0;
 
-    if(volumeData[de] < 30 && volumeData[de] > 20){
+    if(volumeData[de] < 50 && volumeData[de] > 30){
         vl = 2;
     }
 
-    if(volumeData[de] < 40 && volumeData[de] > 30){
+    if(volumeData[de] < 80 && volumeData[de] > 50){
         vl = 4;
     }
-    if(volumeData[de] < 50 && volumeData[de] > 40){
+    if(volumeData[de] < 120 && volumeData[de] > 80){
         vl = 6;
     }
-    if(volumeData[de] > 50){
+    if(volumeData[de] > 120){
         vl = 8;
     }
 
@@ -163,15 +168,3 @@ function clearCanvas() {
     ctx.fillStyle = "rgb(0,0,0)";
     ctx.fillRect(0,0,canvas.width,canvas.height);
 }
-
-/*function renderButtonPressed() {
-    clearCanvas();
-
-    setColor();
-    draw(Math.round(canvas.width/3),0,0,0,iterSlider.value,false);
-}
-
-function clicked(){
-    clearCanvas();
-    draw(Math.round(canvas.width/3),0,0,0,5,true);
-}*/

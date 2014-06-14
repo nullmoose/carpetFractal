@@ -19,7 +19,7 @@
                 </form>
 
                 <br>
-                <audio id="audioplayer" controls="" preload autobuffer></audio>
+                <audio id="audioplayer" controls="" onplay="playButtonPressed()" onpause="pauseButtonPressed()" preload autobuffer></audio>
                 <br>
                 <a href="http://www.soundcloud.com"><img src="sclogo.png"/></a>
             </div>
@@ -28,12 +28,5 @@
                 <canvas id="canvasFract" width="0" height="0" onclick="clicked();"></canvas>
             </div>
         <div>
-
-        <!--<input id="iterationSlider" type="range">Set iterations</input>
-        <input id="redSlider" type="range">Red value</input>
-        <input id="greenSlider" type="range">Green value</input>
-        <input id="blueSlider" type="range">Blue value</input>
-        <button id="renderButton" onclick="renderButtonPressed();">Render</button>
-        <br>-->
     </body>
 </html>
