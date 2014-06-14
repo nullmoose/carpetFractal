@@ -27,7 +27,11 @@ function init(){
     analyserNode.connect(audioCtx.destination);
 
     audioplayer.addEventListener("pause", function(e){
-        clearInterval(setInterval(function(){analyseSound();},100));
+        clearInterval(animateInterval);
+    });
+
+    audioplayer.addEventListener("play", function(e){
+        animateInterval = setInterval(function(){animate();},2);
     });
 
     urlForm = document.getElementById("urlForm");
@@ -85,15 +89,15 @@ function animate(){
     draw(Math.round(canvas.width/3),0,0,0,5,true);
 }
 
-function pauseButtonPressed(){
-    clearInterval(animateInterval);
-    console.log("pause button");
-}
+// function pauseButtonPressed(){
+//     clearInterval(animateInterval);
+//     console.log("pause button");
+// }
 
-function playButtonPressed(){
-    animateInterval = setInterval(function(){animate();},2);
-    console.log("play button");
-}
+// function playButtonPressed(){
+//     animateInterval = setInterval(function(){animate();},2);
+//     console.log("play button");
+// }
 
 function analyseSound(){
     analyserNode.getByteFrequencyData(soundData);
