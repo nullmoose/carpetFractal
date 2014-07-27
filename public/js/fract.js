@@ -99,8 +99,6 @@ var Visualizer = function(){
     canvas.width  = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = Math.min(window.innerWidth, window.innerHeight);
 
-    clientId = "0fbc5c9836ca999eecbcfea77f90bc2f";
-
     self.clearCanvas();
     ctx.fillStyle = "rgb(200,0,0)";
     self.draw(Math.round(canvas.width/3),0,0,0,5,false);
@@ -113,7 +111,8 @@ var AudioStream = function(visualizer){
       analyserNode,
       audioSource,
       soundData,
-      volumeData;
+      volumeData,
+      clientId;
 
   this.visualizer = visualizer;
 
@@ -194,6 +193,8 @@ var AudioStream = function(visualizer){
     audioplayer.addEventListener("play", function(e){
       self.visualizer.resume();
     });
+
+    clientId = "0fbc5c9836ca999eecbcfea77f90bc2f";
   }
 }
 
