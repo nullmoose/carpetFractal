@@ -7,9 +7,7 @@
 	"dependencies": {
 		"config": "*",
 		"express": "3.3.5",
-		"node.extend": "*",
-		"punycode": "*",
-		"underscore": "*"
+		"node.extend": "*"
 	},
 	"devDependencies": {
 		"mocha": "~1.13.0"

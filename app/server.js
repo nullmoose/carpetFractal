@@ -33,10 +33,10 @@ require('../config/routes')(app);
 
 
 // Begin Listening ==============================================================
-server.listen(config.express.port, function(error) {
+server.listen(5000, function(error) {
 	if (error) {
     console.log("Unable to listen for connections: " + error);
     process.exit(10);
   }
- 	console.log("Express is listening on port: " + config.express.port);
+ 	console.log("Express is listening on port: " + 5000);
 });

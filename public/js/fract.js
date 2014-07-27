@@ -99,8 +99,6 @@ var Visualizer = function(){
     canvas.width  = Math.min(window.innerWidth, window.innerHeight);
     canvas.height = Math.min(window.innerWidth, window.innerHeight);
 
-    clientId = "0fbc5c9836ca999eecbcfea77f90bc2f";
-
     self.clearCanvas();
     ctx.fillStyle = "rgb(200,0,0)";
     self.draw(Math.round(canvas.width/3),0,0,0,5,false);
@@ -120,32 +118,16 @@ var AudioStream = function(visualizer){
   var self = this;
 
   this.playSound = function(soundURL){
-      SC.initialize({client_id: clientId});
 
-      SC.get('/resolve', { url: soundURL }, function(sound) {
-          if (sound.errors) {
-              errorMessage = "";
-              for (var i = 0; i < sound.errors.length; i++) {
-                  errorMessage += sound.errors[i].error_message + '<br>';
-              }
-              errorMessage += 'Make sure the URL has the correct format: https://soundcloud.com/user/title-of-the-track';
-              console.log('There was an error: ' + errorMessage);
-          } else {
+    var encoded = encodeURIComponent(soundURL);
 
-              if(sound.kind=="playlist"){
-                  streamPlaylistIndex = 0;
-                  findStream = function(){
-                      return sound.tracks[streamPlaylistIndex].stream_url + '?client_id=' + clientId;
-                  }
-                  streamUrl = findStream();
-              }else{
-                  findStream = function(){ return sound.stream_url + '?client_id=' + clientId; };
-                  streamUrl = findStream();
-                  audioPlayer.setAttribute("src", streamUrl);
-                  audioPlayer.play();
-              }
-          }
-      });
+    $.get('/stream/'+encoded,function(data){
+      var streamUrl = data.streamUrl;
+      audioPlayer.setAttribute("src", streamUrl);
+      audioPlayer.play();
+    }).fail(function(){
+      alert('error');
+    });
   }
 
   this.analyseSound = function(){
